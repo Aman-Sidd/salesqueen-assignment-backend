@@ -1,20 +1,23 @@
 const axios = require("axios");
 
 const pushNotificationController = async (req, res) => {
-  const { expoPushToken, message } = req.body;
+  const { requestObject } = req.body;
 
-  if (!expoPushToken || !message) {
-    return res
-      .status(400)
-      .json({ error: "expoPushToken and message are required" });
+  if (!requestObject) {
+    return res.status(400).json({ error: "requestObject is required" });
   }
 
   try {
-    const response = await axios.post("https://exp.host/--/api/v2/push/send", {
-      to: expoPushToken,
-      sound: "default",
-      body: message,
-    });
+    const pushTokenConfig = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const response = await axios.post(
+      "https://exp.host/--/api/v2/push/send",
+      requestObject,
+      pushTokenConfig
+    );
 
     if (response.status === 200) {
       res.status(200).json({ success: true, data: response.data });
