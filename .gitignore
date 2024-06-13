@@ -97,3 +97,4 @@ public
 *.iml
 
 # Other directories and files specific to your project
+.vercel
